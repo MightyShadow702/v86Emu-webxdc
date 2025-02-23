@@ -2,3 +2,20 @@
 	margin:0px;
 	padding:0px;
 }
+body {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100vw;
+		height: 100vh;
+		overflow: hidden;
+}
+#screen_container {
+		max-width: 100%;
+		max-height: 100%;
+		width: auto;
+		height: auto;
+		object-fit: contain;
+		transform-origin: center;
+		transition: transform 0.3s ease;
+}
