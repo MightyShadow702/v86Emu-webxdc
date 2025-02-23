@@ -1,0 +1,4 @@
+name = "v86Emu"
+description = "a webxdc application"
+source_code_url = "https://github.com/MightyShadow702/v86Emu-webxdc"
+tag_name = "0.1"
