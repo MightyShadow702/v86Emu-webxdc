@@ -3,7 +3,6 @@
 	padding:0px;
 }
 
-
 body {
     display: flex;
     justify-content: center;
@@ -86,7 +85,7 @@ body {
 	margin: 25px;
 	padding: 15px;
 	border: 1px solid black;
-	font-size: 4vw;
-	width: 100px;
+	min-width: 25%;
+	font-size: 2.5vw;
 	border-radius: 25px;
 }
