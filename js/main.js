@@ -96,7 +96,7 @@ class Emulator
       var scaleFactor = Math.min(window.innerWidth / screen.clientWidth, (window.innerHeight-50) / screen.clientHeight);
       if (scaleFactor === 1)
       {
-          engine.screen_set_scale(1,1);
+          engine.screen_set_scale(0.1,0.1);
       }
       screen.style.transform = `scale(${scaleFactor})`;
     }, 250);
