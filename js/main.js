@@ -99,7 +99,7 @@ class Emulator
           engine.screen_set_scale(0.1,0.1);
       }
       screen.style.transform = `scale(${scaleFactor})`;
-    }, 250);
+    }, 100);
   }
 }
 
