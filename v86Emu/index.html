@@ -9,14 +9,23 @@
 		<link rel="stylesheet" href="css/main.css"/>
 		<title>v86Emu</title>
 	</head>
-	<body onload="onload()">
-		<!--Display screen container-->
-		<!--
-		<div id="screen_container">
-		    <div style="white-space: pre; font: 14px monospace; line-height: 14px"></div>
-		    <canvas style="display: none"></canvas>
+	<body>
+		<div id="Init">
+			<div class="oneline">
+			<p>Disk-image (ISO):</p>
+			<input id="disk_image" type="file" name="iso">
+			</div>
+			<div class="oneline">
+			<p>Memory:</p>
+			<input id="memory_size" value="128" />
+			<p>MB</p>
+   		</div>
+			<div class="oneline">
+			<p>vRAM:</p>
+			<input id="vram_size" value="32" />
+			<p>MB</p>
+			</div>
+			<button id="start_bt" onclick="load_image()">Start</button>
 		</div>
-	-->
-		<input type="file" name="iso" onchange="load_image(this)">
 	</body>
 </html>

@@ -8,7 +8,7 @@ class Emulator
   {
     clearInterval(this._id);
   }
-  constructor({ mem=128*1024*1024, vga_mem=32*1024*1024, cdrom=null, hda=null, fda=null } = {})
+  constructor({ mem=128*1024*1024, vram=32*1024*1024, cdrom=null, hda=null, fda=null } = {})
   {
     var engine;
 
@@ -59,7 +59,7 @@ class Emulator
     var config = {
       wasm_path: "core/v86.wasm",
       memory_size: mem,
-      vga_memory_size: vga_mem,
+      vga_memory_size: vram,
       screen_container: screen,
       bios: {
           url: "bios/seabios.bin",
@@ -97,15 +97,14 @@ class Emulator
   }
 }
 
-function load_image(submit)
+function load_image()
 {
-  console.log(submit.files[0]);
-  window.emu = new Emulator({cdrom: submit.files[0]});
+  var disk_image = document.getElementById("disk_image").files[0];
+  var mem_size = document.getElementById("memory_size").value;
+  var vram_size = document.getElementById("vram_size").value;
+  if (!isNaN(mem_size) && !isNaN(vram_size) && disk_image !== undefined)
+  {
+    document.getElementById("Init").style.display = "none";
+    window.emu = new Emulator({cdrom: disk_image, mem: parseInt(mem_size)*1024*1024, vram: parseInt(mem_size)*1024*1024});
+  }
 }
-
-function onload()
-{
-    //window.emu = new Emulator({cdrom:"linux.iso"});
-}
-
-//fit canvas to screen
