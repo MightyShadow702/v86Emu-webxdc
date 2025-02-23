@@ -35,6 +35,8 @@ class Emulator
 
     var user_input = document.createElement("input");
     user_input.id = "EmulatorInput";
+    user_input.placeholder = "Keyboard";
+
     user_input.onchange = function()
     {
       for (var i in user_input.value)
@@ -45,11 +47,15 @@ class Emulator
       user_input.value = null;
     }
 
-    user_input.onkeypress = function(event)
+    user_input.onkeydown = function(event)
     {
       if (event.keyCode == 13)
       {
         engine.keyboard_adapter.simulate_press(13);
+      }
+      else if (event.keyCode == 8)
+      {
+        engine.keyboard_adapter.simulate_press(8);
       }
     }
 
