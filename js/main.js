@@ -14,8 +14,6 @@ class Emulator
 
     var emulator_view = document.createElement("div");
     emulator_view.id = "EmulatorView";
-    var emulator_screenarea = document.createElement("div");
-    emulator_screenarea.id = "EmulatorScreenarea"
 
     //Screen
     var screen = this.screen = document.createElement("div");
@@ -23,41 +21,41 @@ class Emulator
     //For Text-mode
     var screen_textout = document.createElement("div");
     screen_textout.style = "white-space: pre; font: 1vw monospace; line-height: 1.1vw";
+    screen_textout.classList.add("emulator_screen");
     screen.appendChild(screen_textout);
 
     //For Graphical-mode
     var screen_display = document.createElement("canvas");
     screen_display.style.display = "none";
+    screen_display.classList.add("emulator_screen");
     screen.appendChild(screen_display);
-    emulator_screenarea.appendChild(screen);
-
-    emulator_view.appendChild(emulator_screenarea);
+    emulator_view.appendChild(screen);
 
     var user_input = document.createElement("input");
     user_input.id = "EmulatorInput";
     user_input.placeholder = "Keyboard";
 
-    user_input.onchange = function()
-    {
-      for (var i in user_input.value)
-      {
-        engine.keyboard_adapter.simulate_char(user_input.value[i]);
-      }
-      engine.keyboard_adapter.simulate_press(13);
-      user_input.value = null;
-    }
-
     user_input.onkeydown = function(event)
     {
-      if (event.keyCode == 13)
+      //8: backspace, 13: return, 37: left 38: up, 39: right, 40: down
+      if (event.keyCode <= 47)
       {
-        engine.keyboard_adapter.simulate_press(13);
-      }
-      else if (event.keyCode == 8)
-      {
-        engine.keyboard_adapter.simulate_press(8);
+        engine.keyboard_adapter.simulate_press(event.keyCode);
       }
     }
+
+    user_input.onkeypress = function(event)
+    {
+      if (event.keyCode >= 32)
+      {
+        engine.keyboard_adapter.simulate_char(event.key);
+      }
+    }
+    user_input.onkeyup = function()
+    {
+      user_input.value = "";
+    }
+
 
     emulator_view.appendChild(user_input);
     document.body.appendChild(emulator_view);
@@ -92,15 +90,20 @@ class Emulator
     engine = new V86(config);
     this.engine = engine;
 
-    this._id = setInterval(function(){
-      var scaleFactor = Math.min(1+(window.innerWidth / screen.clientWidth), 1+((window.innerHeight-50) / screen.clientHeight))-1;
-
-      if (scaleFactor === 1)
+    function scaleEmulator(){
+      var container = screen;
+      var emulator = screen_display.style.display == "none" ? screen_textout : screen_display;
+      if (! emulator)
       {
-          engine.screen_set_scale(0.1,0.1);
+        return;
       }
-      screen.style = `transform: scale(${scaleFactor})`;
-    }, 100);
+      var scaleX = container.clientWidth / emulator.clientWidth;
+      var scaleY = container.clientHeight / emulator.clientHeight;
+      var scale = Math.min(scaleX, scaleY);
+      emulator.style.transform = `scale(${scale})`;
+    }
+    window.addEventListener("resize", scaleEmulator);
+    this._id = setInterval(scaleEmulator, 100);
   }
 }
 

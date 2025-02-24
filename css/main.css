@@ -10,14 +10,28 @@ body {
     height: 100vh;
     margin: 0;
 		text-align: center;
+		overflow: hidden;
 }
 
 #EmulatorView {
-	position: fixed;
+	width: 100vw;
+	height: 100vh;
+}
+#screen_container {
+		width: 100%;
+		height: calc(100% - 50px);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		overflow: hidden;
+		background-color: rgb(55, 55, 55);
+}
+
+.emulator_screen {
+	transform-origin: top left;
+	position: absolute;
 	top:0px;
-	left:0px;
-	bottom: 0px;
-	right: 0px;
+	left: 0px;
 }
 
 #EmulatorInput {
@@ -30,24 +44,6 @@ body {
 
 #start_bt {
 	font-size: 14px;
-}
-
-#EmulatorScreenarea {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		overflow: hidden;
-		width: 100%;
-		height: calc(100% - 50px);
-}
-#screen_container {
-		max-width: 100%;
-		max-height: 100%;
-		width: auto;
-		height: auto;
-		object-fit: contain;
-		transform-origin: center;
-		transition: transform 0.3s ease;
 }
 
 #Init{
