@@ -22,7 +22,7 @@ class Emulator
     screen.id = "screen_container";
     //For Text-mode
     var screen_textout = document.createElement("div");
-    screen_textout.style = "white-space: pre; font: 12px monospace; line-height: 14px";
+    screen_textout.style = "white-space: pre; font: 1vw monospace; line-height: 1.1vw";
     screen.appendChild(screen_textout);
 
     //For Graphical-mode
@@ -93,12 +93,13 @@ class Emulator
     this.engine = engine;
 
     this._id = setInterval(function(){
-      var scaleFactor = Math.min(window.innerWidth / screen.clientWidth, (window.innerHeight-50) / screen.clientHeight);
+      var scaleFactor = Math.min(1+(window.innerWidth / screen.clientWidth), 1+((window.innerHeight-50) / screen.clientHeight))-1;
+
       if (scaleFactor === 1)
       {
           engine.screen_set_scale(0.1,0.1);
       }
-      screen.style.transform = `scale(${scaleFactor})`;
+      screen.style = `transform: scale(${scaleFactor})`;
     }, 100);
   }
 }
@@ -108,9 +109,24 @@ function load_image()
   var disk_image = document.getElementById("disk_image").files[0];
   var mem_size = document.getElementById("memory_size").value;
   var vram_size = document.getElementById("vram_size").value;
+  var disk_type = document.getElementById("disk_type").selectedIndex;
   if (!isNaN(mem_size) && !isNaN(vram_size) && disk_image !== undefined)
   {
     document.getElementById("Init").style.display = "none";
-    window.emu = new Emulator({cdrom: disk_image, mem: parseInt(mem_size)*1024*1024, vram: parseInt(mem_size)*1024*1024});
+    var config = {mem: parseInt(mem_size)*1024*1024, vram: parseInt(mem_size)*1024*1024};
+    if (disk_type == 1)
+    {
+      config["hda"] = disk_image;
+    }
+    else if (disk_type == 2)
+    {
+      config["cdrom"] = disk_image;
+    }
+    else if (disk_type == 0)
+    {
+      config["fda"] = disk_image;
+    }
+    console.log(config);
+    window.emu = new Emulator(config);
   }
 }
