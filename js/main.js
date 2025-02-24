@@ -42,10 +42,11 @@ class Emulator
       {
         engine.keyboard_adapter.simulate_press(event.keyCode);
       }
-      else
-      {
-        engine.keyboard_adapter.simulate_char(event.key);
-      }
+    }
+
+    user_input.oninput = function(event)
+    {
+      engine.keyboard_adapter.simulate_char(event.data);
     }
 
     user_input.onkeyup = function()
