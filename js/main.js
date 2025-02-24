@@ -42,15 +42,12 @@ class Emulator
       {
         engine.keyboard_adapter.simulate_press(event.keyCode);
       }
-    }
-
-    user_input.onkeypress = function(event)
-    {
-      if (event.keyCode >= 32)
+      else
       {
         engine.keyboard_adapter.simulate_char(event.key);
       }
     }
+
     user_input.onkeyup = function()
     {
       user_input.value = "";
