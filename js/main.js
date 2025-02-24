@@ -20,7 +20,7 @@ class Emulator
     screen.id = "screen_container";
     //For Text-mode
     var screen_textout = document.createElement("div");
-    screen_textout.style = "white-space: pre; font: 1vw monospace; line-height: 1.1vw";
+    screen_textout.style = "white-space: pre; font: 12px monospace; line-height: 14px";
     screen_textout.classList.add("emulator_screen");
     screen.appendChild(screen_textout);
 
