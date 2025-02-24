@@ -127,7 +127,6 @@ function load_image()
     {
       config["fda"] = disk_image;
     }
-    console.log(config);
     window.emu = new Emulator(config);
   }
 }
