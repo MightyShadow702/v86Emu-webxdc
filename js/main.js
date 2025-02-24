@@ -105,28 +105,51 @@ class Emulator
   }
 }
 
+function save_config()
+{
+  localStorage.memory_size = document.getElementById("memory_size").value;
+  localStorage.vram_size = document.getElementById("vram_size").value;
+  localStorage.disk_typ = document.getElementById("disk_typ").selectedIndex;
+}
+
 function load_image()
 {
   var disk_image = document.getElementById("disk_image").files[0];
   var mem_size = document.getElementById("memory_size").value;
   var vram_size = document.getElementById("vram_size").value;
-  var disk_type = document.getElementById("disk_type").selectedIndex;
+  var disk_typ = document.getElementById("disk_typ").selectedIndex;
   if (!isNaN(mem_size) && !isNaN(vram_size) && disk_image !== undefined)
   {
     document.getElementById("Init").style.display = "none";
     var config = {mem: parseInt(mem_size)*1024*1024, vram: parseInt(mem_size)*1024*1024};
-    if (disk_type == 1)
+    if (disk_typ == 1)
     {
       config["hda"] = disk_image;
     }
-    else if (disk_type == 2)
+    else if (disk_typ == 2)
     {
       config["cdrom"] = disk_image;
     }
-    else if (disk_type == 0)
+    else if (disk_typ == 0)
     {
       config["fda"] = disk_image;
     }
     window.emu = new Emulator(config);
+  }
+}
+
+function onload()
+{
+  if (localStorage.memory_size)
+  {
+     document.getElementById("memory_size").value = localStorage.memory_size;
+  }
+  if (localStorage.vram_size)
+  {
+     document.getElementById("vram_size").value = localStorage.vram_size;
+  }
+  if (localStorage.disk_typ)
+  {
+     document.getElementById("disk_typ").selectedIndex = localStorage.disk_typ;
   }
 }
