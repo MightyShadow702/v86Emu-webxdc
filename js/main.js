@@ -31,10 +31,13 @@ class Emulator
     screen.appendChild(screen_display);
     emulator_view.appendChild(screen);
 
+    screen_display.onclick = function(){
+      engine.lock_mouse();
+    }
+
     var user_input = document.createElement("input");
     user_input.id = "EmulatorInput";
-    user_input.placeholder = "Keyboard";
-
+    user_input.type = "password";
     user_input.onkeydown = function(event)
     {
       //8: backspace, 13: return, 37: left 38: up, 39: right, 40: down
@@ -46,7 +49,10 @@ class Emulator
 
     user_input.oninput = function(event)
     {
-      engine.keyboard_adapter.simulate_char(event.data);
+      if (event.data != " ")
+      {
+        engine.keyboard_adapter.simulate_char(event.data);
+      }
     }
 
     user_input.onkeyup = function()
@@ -102,6 +108,23 @@ class Emulator
     }
     window.addEventListener("resize", scaleEmulator);
     this._id = setInterval(scaleEmulator, 100);
+
+    emulator_view.onclick = function(){
+      user_input.focus();
+    }
+
+    if (window.webxdc.joinRealtimeChannel !== undefined)
+    {
+      const realtimeChannel = window.webxdc.joinRealtimeChannel();
+      realtimeChannel.setListener((data) => {
+        console.log("net recieve", data);
+        engine.bus.send("net0-recieve", data);
+      });
+      engine.add_listener("net0-send", function(packet){
+        console.log("net send", packet);
+        realtimeChannel.send(packet);
+      })
+    }
   }
 }
 
