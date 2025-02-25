@@ -116,7 +116,7 @@ class Emulator
       window.RTC = realtimeChannel;
       realtimeChannel.setListener((data) => {
         console.log("net recieve", data);
-        engine.bus.send("net0-recieve", data);
+        engine.bus.send("net0-receive", data);
       });
       engine.add_listener("net0-send", function(packet){
         console.log("net send", packet);
