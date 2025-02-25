@@ -41,7 +41,7 @@ class Emulator
     user_input.onkeydown = function(event)
     {
       //8: backspace, 13: return, 37: left 38: up, 39: right, 40: down
-      if (event.keyCode <= 47)
+      if (event.keyCode <= 47 && event.keyCode != 32)
       {
         engine.keyboard_adapter.simulate_press(event.keyCode);
       }
@@ -49,10 +49,7 @@ class Emulator
 
     user_input.oninput = function(event)
     {
-      if (event.data != " ")
-      {
-        engine.keyboard_adapter.simulate_char(event.data);
-      }
+      engine.keyboard_adapter.simulate_char(event.data);
     }
 
     user_input.onkeyup = function()
