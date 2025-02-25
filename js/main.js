@@ -10,10 +10,15 @@ class Emulator
   }
   constructor({ mem=128*1024*1024, vram=32*1024*1024, cdrom=null, hda=null, fda=null } = {})
   {
+
     var engine;
+
+    var ctrl_pressed = false;
+    var alt_pressed = false;
 
     var emulator_view = document.createElement("div");
     emulator_view.id = "EmulatorView";
+    document.body.appendChild(emulator_view);
 
     //Screen
     var screen = this.screen = document.createElement("div");
@@ -33,33 +38,8 @@ class Emulator
 
     screen_display.onclick = function(){
       engine.lock_mouse();
+      screen.focus();
     }
-
-    var user_input = document.createElement("input");
-    user_input.id = "EmulatorInput";
-    user_input.type = "password";
-    user_input.onkeydown = function(event)
-    {
-      //8: backspace, 13: return, 37: left 38: up, 39: right, 40: down
-      if (event.keyCode <= 47 && event.keyCode != 32)
-      {
-        engine.keyboard_adapter.simulate_press(event.keyCode);
-      }
-    }
-
-    user_input.oninput = function(event)
-    {
-      engine.keyboard_adapter.simulate_char(event.data);
-    }
-
-    user_input.onkeyup = function()
-    {
-      user_input.value = "";
-    }
-
-
-    emulator_view.appendChild(user_input);
-    document.body.appendChild(emulator_view);
 
     var config = {
       wasm_path: "core/v86.wasm",
@@ -106,9 +86,138 @@ class Emulator
     window.addEventListener("resize", scaleEmulator);
     this._id = setInterval(scaleEmulator, 100);
 
-    emulator_view.onclick = function(){
-      user_input.focus();
+    // Menubar
+    var keyboard_menu = document.createElement("div");
+    keyboard_menu.id = "keyboard_menu";
+
+    //ctrl key
+    var ctrl_bt = document.createElement("button");
+    ctrl_bt.innerHTML = "CTRL";
+    ctrl_bt.onclick = function()
+    {
+      ctrl_pressed = !ctrl_pressed;
+      if (ctrl_pressed)
+      {
+        ctrl_bt.style.backgroundColor = "black";
+        ctrl_bt.style.color = "white";
+      }
+      else
+      {
+        ctrl_bt.style.backgroundColor = "";
+        ctrl_bt.style.color = "black";
+      }
     }
+    keyboard_menu.appendChild(ctrl_bt);
+
+    //alt key
+    var alt_bt = document.createElement("button");
+    alt_bt.innerHTML = "ALT";
+    alt_bt.onclick = function()
+    {
+      alt_pressed = !alt_pressed;
+      if (alt_pressed)
+      {
+        alt_bt.style.backgroundColor = "black";
+        alt_bt.style.color = "white";
+      }
+      else
+      {
+        alt_bt.style.backgroundColor = "";
+        alt_bt.style.color = "black";
+      }
+    }
+    keyboard_menu.appendChild(alt_bt);
+
+    //Input handling for mobile devices
+    var user_input = document.createElement("input");
+    user_input.id = "EmulatorInput";
+    user_input.type = "password";
+    user_input.placeholder = "Keyboard";
+    user_input.onkeydown = function(event)
+    {
+      //8: backspace, 13: return, 37: left 38: up, 39: right, 40: down
+      if (event.keyCode <= 47 && event.keyCode != 32)
+      {
+        engine.keyboard_adapter.simulate_press(event.keyCode);
+      }
+      else
+      {
+        window.emu.engine.keyboard_send_keys(event);
+      }
+    }
+
+    user_input.oninput = function(event)
+    {
+      engine.keyboard_adapter.simulate_char(event.data);
+    }
+
+    user_input.onkeyup = function()
+    {
+      user_input.value = "";
+    }
+    keyboard_menu.appendChild(user_input);
+
+    var clipboardbt = document.createElement("button");
+    clipboardbt.innerHTML = "Paste";
+    clipboardbt.onclick = function()
+    {
+      var buffer = prompt("Insert from clipboard");
+      for (var i in buffer)
+      {
+        engine.keyboard_adapter.simulate_char(buffer[i]);
+      }
+    }
+    keyboard_menu.appendChild(clipboardbt);
+
+    document.body.appendChild(keyboard_menu);
+
+    //Power menu
+
+    var powermenubt = document.createElement("button");
+    var powermenubt_icon = document.createElement("img");
+    powermenubt_icon.src = "assets/pause.svg";
+    powermenubt.appendChild(powermenubt_icon);
+    powermenubt.id ="pwmenubt";
+    powermenubt.onclick = function(){
+      if(document.getElementById("PowerMenu"))
+      {
+        document.getElementById("PowerMenu").remove();
+      }
+      var powermenu = document.createElement("div");
+      powermenu.id = "PowerMenu";
+
+      var stopbt = document.createElement("button");
+      stopbt.innerHTML = "Stop";
+      stopbt.id = "stop";
+      stopbt.onclick = function(){
+        engine.stop().then(_ => {
+          emulator_view.remove();
+          powermenu.remove();
+          powermenubt.remove();
+          keyboard_menu.remove();
+          document.getElementById("Init").style.display = "block";
+        })
+      }
+
+      powermenu.appendChild(stopbt);
+      var resetbt = document.createElement("button");
+      resetbt.innerHTML = "Restart";
+      resetbt.id = "restart";
+      resetbt.onclick = function(){
+        engine.restart();
+        powermenu.remove();
+      }
+      powermenu.appendChild(resetbt);
+
+      var cancelbt = document.createElement("button");
+      cancelbt.innerHTML = "Cancel";
+      cancelbt.onclick = function(){
+        powermenu.remove();
+      }
+      powermenu.appendChild(cancelbt);
+      document.body.appendChild(powermenu);
+    }
+    document.body.appendChild(powermenubt);
 
     if (window.webxdc.joinRealtimeChannel !== undefined && document.getElementById("network_active").checked)
     {
@@ -172,6 +281,23 @@ function toggle_network()
     network_alt.innerHTML = "disabled";
   }
   save_config();
+}
+
+function autodetect_image(elem)
+{
+  var ext = elem.files[0].name.split(".").at(-1).toLowerCase();
+  if (elem.files[0].size == 1474560 && ext == "img")
+  {
+    document.getElementById("disk_typ").selectedIndex = 0;
+  }
+  else if (ext == "img")
+  {
+    document.getElementById("disk_typ").selectedIndex = 1;
+  }
+  else if (ext == "iso")
+  {
+    document.getElementById("disk_typ").selectedIndex = 2;
+  }
 }
 
 function onload()

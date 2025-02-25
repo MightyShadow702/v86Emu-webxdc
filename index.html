@@ -14,7 +14,7 @@
 			<div id="content">
 			<div class="oneline">
 				<p>Disk-image:</p>
-				<input id="disk_image" type="file" name="iso">
+				<input id="disk_image" type="file" name="iso" onchange="autodetect_image(this)">
 				<select name="disk" id="disk_typ" onchange="save_config()">
 					<option value="hdd">floppy (img)</hdd>
 					<option value="hdd">hdd (img)</hdd>
