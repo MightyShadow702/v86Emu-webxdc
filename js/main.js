@@ -98,11 +98,13 @@ class Emulator
       ctrl_pressed = !ctrl_pressed;
       if (ctrl_pressed)
       {
-        ctrl_bt.style.backgroundColor = "black";
+        engine.keyboard_send_scancodes([0x1D]);
+        ctrl_bt.style.backgroundColor = "rgb(22, 22, 22)";
         ctrl_bt.style.color = "white";
       }
       else
       {
+        engine.keyboard_send_scancodes([0x1D | 0x80]);
         ctrl_bt.style.backgroundColor = "";
         ctrl_bt.style.color = "black";
       }
@@ -117,16 +119,27 @@ class Emulator
       alt_pressed = !alt_pressed;
       if (alt_pressed)
       {
-        alt_bt.style.backgroundColor = "black";
+        engine.keyboard_send_scancodes([0x38]);
+        alt_bt.style.backgroundColor = "rgb(22, 22, 22)";
         alt_bt.style.color = "white";
       }
       else
       {
+        engine.keyboard_send_scancodes([0x38 | 0x80]);
         alt_bt.style.backgroundColor = "";
         alt_bt.style.color = "black";
       }
     }
     keyboard_menu.appendChild(alt_bt);
+
+    //tab key
+    var tab_bt = document.createElement("button");
+    tab_bt.innerHTML = "TAB";
+    tab_bt.onclick = function()
+    {
+      engine.keyboard_adapter.simulate_press(9);
+    }
+    keyboard_menu.appendChild(tab_bt);
 
     //Input handling for mobile devices
     var user_input = document.createElement("input");
@@ -140,14 +153,18 @@ class Emulator
       {
         engine.keyboard_adapter.simulate_press(event.keyCode);
       }
-      else
-      {
-        window.emu.engine.keyboard_send_keys(event);
-      }
     }
 
     user_input.oninput = function(event)
     {
+      if (ctrl_pressed)
+      {
+        engine.keyboard_adapter.simulate_press([17, 'a']);
+      }
+      else if (alt_pressed)
+      {
+        engine.keyboard_adapter.simulate_press(18);
+      }
       engine.keyboard_adapter.simulate_char(event.data);
     }
 
@@ -190,7 +207,7 @@ class Emulator
       stopbt.innerHTML = "Stop";
       stopbt.id = "stop";
       stopbt.onclick = function(){
-        engine.stop().then(_ => {
+        engine.destroy().then(_ => {
           emulator_view.remove();
           powermenu.remove();
           powermenubt.remove();
