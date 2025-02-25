@@ -11,28 +11,36 @@
 	</head>
 	<body onload="onload()">
 		<div id="Init">
+			<div id="content">
 			<div class="oneline">
-			<p>Disk-image:</p>
-			<input id="disk_image" type="file" name="iso">
-			<select name="disk" id="disk_typ" onchange="save_config()">
-				<option value="hdd">floppy (img)</hdd>
-				<option value="hdd">hdd (img)</hdd>
-				<option value="hdd">cdrom (iso)</hdd>
-			</select>
+				<p>Disk-image:</p>
+				<input id="disk_image" type="file" name="iso">
+				<select name="disk" id="disk_typ" onchange="save_config()">
+					<option value="hdd">floppy (img)</hdd>
+					<option value="hdd">hdd (img)</hdd>
+					<option value="hdd">cdrom (iso)</hdd>
+				</select>
 			</div>
 			<div class="oneline">
-			<p>Memory:</p>
-			<div>
-				<input id="memory_size" value="128" onchange="save_config()"/>
-				<p>MB</p>
-			</div>
+				<p>Memory:</p>
+				<div>
+					<input id="memory_size" value="128" onchange="save_config()"/>
+					<p>MB</p>
+				</div>
    		</div>
 			<div class="oneline">
-			<p>vRAM:</p>
-			<div>
-				<input id="vram_size" value="32" onchange="save_config()"/>
-				<p>MB</p>
+				<p>vRAM:</p>
+				<div>
+					<input id="vram_size" value="32" onchange="save_config()"/>
+					<p>MB</p>
+				</div>
 			</div>
+			<div id="network_settings" class="oneline">
+				<p>vNetwork (RTC):</p>
+				<div>
+					<input id="network_active" onclick="toggle_network()" type="checkbox">
+					<p id="network_alt">disabled</p>
+				</div>
 			</div>
 			<button id="start_bt" onclick="load_image()">Start</button>
 		</div>
