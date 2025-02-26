@@ -1,4 +1,4 @@
 name = "v86Emu"
 description = "a webxdc x86 emulator"
 source_code_url = "https://github.com/MightyShadow702/v86Emu-webxdc"
-tag_name = "0.7.2"
+tag_name = "0.7.3"
