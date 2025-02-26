@@ -9,45 +9,16 @@ class Emulator
     this.PowerMenu.remove();
     this.vKeyboard.remove();
     this.display.remove();
-    if (this.RTC)
-    {
-      this.RTC.leave();
-      delete this.RTC;
-    }
     if (this.onStop)
     {
       this.onStop();
-    }
-  }
-  connectRTC(log=false)
-  {
-    if (window.webxdc.joinRealtimeChannel !== undefined)
-    {
-      this.RTC = window.webxdc.joinRealtimeChannel();
-      this.RTC.setListener((data) => {
-        if (log) {console.log("net recieve", data)};
-        this.engine.bus.send("net0-receive", data);
-      });
-      this.engine.add_listener("net0-send", function(packet){
-        if (log) {console.log("net send", packet)};
-        this.RTC.send(packet);
-      });
-    }
-  }
-  disconnectRTC()
-  {
-    if (this.RTC)
-    {
-      this.RTC.setListener(() => {});
-      this.engine.add_listener("net0-send", () => {});
-      this.RTC.leave();
     }
   }
   restart()
   {
     this.engine.restart();
   }
-  constructor({ mem=128*1024*1024, vram=32*1024*1024, cdrom=null, hda=null, fda=null, acpi=true, vnet=true, vnet_debug=true, onstop=undefined } = {})
+  constructor({ mem=128*1024*1024, vram=32*1024*1024, cdrom=null, hda=null, fda=null, acpi=true, vnet=true, onstop=undefined } = {})
   {
     this.onStop = onstop;
 
@@ -123,9 +94,17 @@ class Emulator
     this.vKeyboard = new vKeyboard(engine);
     this.PowerMenu = new PowerMenu(this);
 
-    if (vnet)
+    if (window.webxdc.joinRealtimeChannel !== undefined && vnet)
     {
-      this.connectRTC(vnet_debug);
+      var RTC = window.webxdc.joinRealtimeChannel();
+      RTC.setListener((data) => {
+        console.log("net recieve", data);
+        engine.bus.send("net0-receive", data);
+      });
+      engine.add_listener("net0-send", function(packet){
+        console.log("net send", packet);
+        RTC.send(packet);
+      });
     }
   }
 }
