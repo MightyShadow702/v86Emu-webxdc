@@ -110,7 +110,6 @@ class vKeyboard
     content.appendChild(this.new_button("F11", () => pressKey(122)));
     content.appendChild(this.new_button("F12", () => pressKey(123)));
     content.appendChild(this.new_button("ESC", () => pressKey(27)));
-    content.appendChild(this.new_button("Insert", () => pressKey(45)));
   }
 
   new_input(text, id, type="password"){

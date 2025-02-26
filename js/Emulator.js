@@ -37,6 +37,13 @@ class Emulator
     var screen_display = document.createElement("canvas");
     screen_display.style.display = "none";
     screen_display.classList.add("emulator_screen");
+
+    //Capture mouse
+    screen_display.onclick = function(){
+      engine.lock_mouse();
+      screen_container.focus();
+    }
+    
     screen_container.appendChild(screen_display);
 
     //default config
