@@ -96,7 +96,7 @@ class Emulator
 
     if (window.webxdc.joinRealtimeChannel !== undefined && vnet)
     {
-      var RTC = window.webxdc.joinRealtimeChannel();
+      const RTC = window.webxdc.joinRealtimeChannel();
       RTC.setListener((data) => {
         console.log("net recieve", data);
         engine.bus.send("net0-receive", data);
