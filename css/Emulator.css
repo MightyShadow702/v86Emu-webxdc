@@ -12,7 +12,7 @@
 }
 
 #screen_container canvas {
-	cursor: pointer;
+  cursor: none;
 }
 
 .emulator_screen {
