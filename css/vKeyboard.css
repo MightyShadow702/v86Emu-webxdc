@@ -9,7 +9,6 @@
 	height: var(--vKeyboard_HEIGHT);
 	bottom: 0px;
 	left: 0px;
-	background-color: green;
 }
 #vKeyboard_menubar button, #vKeyboard_menubar input {
 	height: var(--vKeyboard_HEIGHT);
