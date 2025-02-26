@@ -1,0 +1,54 @@
+#PowerMenu_button
+{
+	position: fixed;
+	background-color: transparent;
+	border: 0px;
+	right: 0px;
+	top: 0px;
+	height: 50px;
+	width: 50px;
+	opacity: 0.5;
+	z-index: 100;
+	padding: 5px;
+}
+
+#PowerMenu_button:hover {
+	background-color: rgb(60, 60, 60);
+}
+
+#PowerMenu_button img {
+	width: 100%;
+	height: 100%;
+}
+
+
+#PowerMenu_menu {
+	position: fixed;
+	display: grid;
+	grid-template-columns: repeat(1, 1fr);
+	gap: 15px;
+	top: 25%;
+	left: 25%;
+	bottom: 25%;
+	right: 25%;
+	padding: 15px;
+	background-color: grey;
+	border-radius: 25px;
+}
+
+#PowerMenu_menu button {
+	cursor:pointer;
+	border: 0px;
+	font-size: 3vw;
+	border-radius: 25px;
+}
+
+#PowerMenu_menu .warning {
+  background-color: yellow;
+  color:black;
+}
+
+#PowerMenu_menu .danger {
+  background-color: rgb(145, 0, 0);
+	color:white;
+}

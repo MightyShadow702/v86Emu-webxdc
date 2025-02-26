@@ -1,0 +1,23 @@
+#screen_container {
+    position:fixed;
+    top: 0px;
+    left: 0px;
+		width: 100vw;
+    height: calc(100vh - 40px);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		overflow: hidden;
+		background-color: rgb(55, 55, 55);
+}
+
+#screen_container canvas {
+	cursor: pointer;
+}
+
+.emulator_screen {
+	transform-origin: top left;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}

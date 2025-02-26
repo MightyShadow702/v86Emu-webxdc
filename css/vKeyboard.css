@@ -1,0 +1,66 @@
+:root {
+  --vKeyboard_HEIGHT: 40px;
+  --vKeyboard_SpecialKeys_Close_SIZE: 35px;
+}
+
+#vKeyboard_menubar {
+	position: fixed;
+	width: 100%;
+	height: var(--vKeyboard_HEIGHT);
+	bottom: 0px;
+	left: 0px;
+	background-color: green;
+}
+#vKeyboard_menubar button, #vKeyboard_menubar input {
+	height: var(--vKeyboard_HEIGHT);
+	margin: 0px;
+	border: 0px;
+}
+#vKeyboard_menubar button{
+	padding: 5px;
+	width: 50px;
+  text-align: center;
+}
+
+#vKeyboard_menubar #vKeyboard_stdin {
+  width: calc(100% - 5*50px);
+	text-align: center;
+}
+
+#vKeyboard_SpecialKeys {
+  position: fixed;
+  top: 15%;
+  bottom: 15%;
+  left: 15%;
+  right: 15%;
+  opacity: 0.6;
+  background-color: grey;
+  z-index: 500;
+  border: 0px;
+  border-radius: 25px;
+  overflow: hidden;
+}
+
+#vKeyboard_SpecialKeys #close {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  color: white;
+  background-color: red;
+  width: var(--vKeyboard_SpecialKeys_Close_SIZE);
+  height: var(--vKeyboard_SpecialKeys_Close_SIZE);
+  border: 0px;
+}
+#vKeyboard_SpecialKeys #content {
+  margin-top: var(--vKeyboard_SpecialKeys_Close_SIZE);
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  height: calc(100% - var(--vKeyboard_SpecialKeys_Close_SIZE) - 30px);
+  width: calc(100% - 30px);
+  padding: 15px;
+}
+#vKeyboard_SpecialKeys #content button{
+  border: 0px;
+  font-size: 2vw;
+}
