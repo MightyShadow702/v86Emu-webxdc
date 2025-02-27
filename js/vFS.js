@@ -63,6 +63,13 @@ class vFS_XMLHttpRequest extends XMLHttpRequest
   }
 }
 
+function importFile(fs)
+{
+  window.webxdc.importFiles("").then(files => {
+  fs.addFile(files[0])
+  })
+}
+
 function download(url)
 {
   const xhr = new vFS_XMLHttpRequest();
@@ -86,39 +93,50 @@ function download(url)
 
 class vFS
 {
-  addFile(file)
+  async addFile(file)
   {
-    vFSroot.fsroot.push([
-      file.name,
-      file.size,
-      file.lastModified,
-      33188,
-      1000,
-      1000,
-      "a8076d3d.bin"
-    ]);
-    vFSblob[file.name] = {
-      data: file,
-      type: file.type
-    };
-    vFSroot.size += file.size;
+    await crypto.subtle.digest("SHA-256", await file.arrayBuffer()).then((hash) => {
+      var hash_str = Array.from(new Uint8Array(hash))
+        .map(b => b.toString(16).padStart(2, "0"))
+        .join("").substr(0, 8) + ".bin";
+      vFSroot.fsroot.push([
+        file.name,
+        file.size,
+        file.lastModified,
+        33188,
+        1000,
+        1000,
+        hash_str
+      ]);
+      vFSblob[file.name] = {
+        data: file,
+        type: file.type
+      };
+      vFSroot.size += file.size;
+    });
   }
-  addVirtualFile(name, data, type="text/plain")
+  async addVirtualFile(name, data, type="text/plain")
   {
-    vFSroot.fsroot.push([
-      name,
-      data.length,
-      new Date().getTime(),
-      33188,
-      1000,
-      1000,
-      "a8076d3d.bin"
-    ]);
-    vFSblob[name] = {
-      data: new Blob([data], { type: type }),
-      type: type
-    };
-    vFSroot.size += data.length;
+    var blob = new Blob([data], { type: type });
+    await crypto.subtle.digest("SHA-256", await blob.arrayBuffer()).then((hash) => {
+      var hash_str = Array.from(new Uint8Array(hash))
+        .map(b => b.toString(16).padStart(2, "0"))
+        .join("").substr(0, 8) + ".bin";
+      vFSroot.fsroot.push([
+        name,
+        data.length,
+        new Date().getTime(),
+        33188,
+        1000,
+        1000,
+        hash_str
+      ]);
+      vFSblob[name] = {
+        data: blob,
+        type: type
+      };
+      vFSroot.size += data.length;
+    });
   }
   removeFile(name)
   {
