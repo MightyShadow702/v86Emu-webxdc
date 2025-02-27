@@ -65,8 +65,11 @@ class vFS_XMLHttpRequest extends XMLHttpRequest
 
 function importFile(fs)
 {
-  window.webxdc.importFiles("").then(files => {
-  fs.addFile(files[0])
+  window.webxdc.importFiles({multiple: true}).then(files => {
+    for (var i in files)
+    {
+      fs.addFile(files[i]);
+    }
   })
 }
 
