@@ -24,7 +24,8 @@ function load_image()
       vram: parseInt(mem_size)*1024*1024,
       acpi: document.getElementById("acpi_active").checked,
       vnet: document.getElementById("network_active").checked,
-      onstop: () => {document.getElementById("Init").style.display = "block";}
+      onstop: () => {document.getElementById("Init").style.display = "block";},
+      vfs: true
     };
 
     if (disk_typ == 1)

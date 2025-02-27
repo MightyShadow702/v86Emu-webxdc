@@ -18,7 +18,7 @@ class Emulator
   {
     this.engine.restart();
   }
-  constructor({ mem=128*1024*1024, vram=32*1024*1024, cdrom=null, hda=null, fda=null, acpi=true, vnet=true, onstop=undefined } = {})
+  constructor({ mem=128*1024*1024, vram=32*1024*1024, cdrom=null, hda=null, fda=null, acpi=true, vnet=true, onstop=undefined, vfs=false } = {})
   {
     this.onStop = onstop;
 
@@ -43,7 +43,7 @@ class Emulator
       engine.lock_mouse();
       screen_container.focus();
     }
-    
+
     screen_container.appendChild(screen_display);
 
     //default config
@@ -73,6 +73,15 @@ class Emulator
     if (fda != null)
     {
       config["fda"] = typeof fda == "string" ? {url: fda} : {buffer: fda};
+    }
+
+    if (vfs)
+    {
+      this.vfs = new vFS();
+      config["filesystem"] = {
+        basefs: "/vFS.json",
+        baseurl: "/vFS_blob/"
+      }
     }
 
     this.config = config;
