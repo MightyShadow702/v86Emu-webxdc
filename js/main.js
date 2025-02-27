@@ -1,4 +1,5 @@
 "use strict";
+var vfs = new vFS();
 
 function save_config()
 {

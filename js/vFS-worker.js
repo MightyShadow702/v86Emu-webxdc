@@ -5,7 +5,7 @@ var vFS_blob = {
 var vFSroot = {
   "fsroot": [],
   "size": 0,
-  "version": 2
+  "version": 3
 }
 
 self.addEventListener('install', event => {
@@ -18,7 +18,7 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('message', (event) => {
   if (event.data.mode === "add_file") {
-    vFSroot.fsroot.push([event.data.name, 4, event.data.mtime, event.data.size, 1000, 1000])
+    vFSroot.fsroot.push([event.data.name, event.data.size, event.data.mtime, 33188, 1000, 1000, "a8076d3d.bin"])
     vFSroot.size += event.data.size;
     vFS_blob[event.data.name] = {data: event.data.data, type: event.data.type};
   }

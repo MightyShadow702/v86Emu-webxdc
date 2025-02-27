@@ -34,7 +34,7 @@ class vFS
   {
     if ("serviceWorker" in navigator)
     {
-      navigator.serviceWorker.register('/vFS-worker.js').catch(err => console.log('vFS-worker can not start...', err));
+      navigator.serviceWorker.register('/js/vFS-worker.js').catch(err => console.log('vFS-worker can not start...', err));
     }
   }
 }

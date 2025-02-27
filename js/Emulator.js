@@ -77,7 +77,6 @@ class Emulator
 
     if (vfs)
     {
-      this.vfs = new vFS();
       config["filesystem"] = {
         basefs: "/vFS.json",
         baseurl: "/vFS_blob/"
