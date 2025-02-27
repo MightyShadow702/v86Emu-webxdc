@@ -64,14 +64,17 @@ class Emulator
 
     if (cdrom != null)
     {
+      config["boot_order"] = 123;
       config["cdrom"] = typeof cdrom == "string" ? {url: cdrom} : {buffer: cdrom};
     }
     if (hda != null)
     {
+      config["boot_order"] = 132;
       config["hda"] = typeof hda == "string" ? {url: hda} : {buffer: hda};
     }
     if (fda != null)
     {
+      config["boot_order"] = 231;
       config["fda"] = typeof fda == "string" ? {url: fda} : {buffer: fda};
     }
 
