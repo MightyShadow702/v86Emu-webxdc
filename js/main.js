@@ -26,7 +26,7 @@ function load_image()
       acpi: document.getElementById("acpi_active").checked,
       vnet: document.getElementById("network_active").checked,
       onstop: () => {document.getElementById("Init").style.display = "block";},
-      vfs: true
+      vfs: false
     };
 
     if (disk_typ == 1)
