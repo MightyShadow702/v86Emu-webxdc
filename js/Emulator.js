@@ -18,7 +18,7 @@ class Emulator
   {
     this.engine.restart();
   }
-  constructor({ mem=128*1024*1024, vram=32*1024*1024, cdrom=null, hda=null, fda=null, acpi=true, vnet=true, onstop=undefined } = {})
+  constructor({ mem=128*1024*1024, vram=32*1024*1024, cdrom=null, hda=null, fda=null, acpi=true, vnet=true, onstop=undefined, bios="seabios.bin", vgabios="vgabios.bin" } = {})
   {
     this.onStop = onstop;
 
@@ -43,7 +43,7 @@ class Emulator
       engine.lock_mouse();
       screen_container.focus();
     }
-    
+
     screen_container.appendChild(screen_display);
 
     //default config
@@ -53,10 +53,10 @@ class Emulator
       vga_memory_size: vram,
       screen_container: screen_container,
       bios: {
-          url: "bios/seabios.bin",
+          url: "bios/" + bios,
       },
       vga_bios: {
-          url: "bios/vgabios.bin",
+          url: "bios/" + vgabios,
       },
       acpi: acpi,
       autostart: true

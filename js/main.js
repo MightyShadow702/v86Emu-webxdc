@@ -4,7 +4,7 @@ function save_config()
 {
   localStorage.memory_size = document.getElementById("memory_size").value;
   localStorage.vram_size = document.getElementById("vram_size").value;
-  localStorage.disk_typ = document.getElementById("disk_typ").selectedIndex;
+  localStorage.disk_typ = document.getElementById("disk_typ").value;
   localStorage.network_active = document.getElementById("network_active").checked ? "1" : "0";
   localStorage.acpi_active = document.getElementById("acpi_active").checked ? "1" : "0";
 }
@@ -14,7 +14,7 @@ function load_image()
   var disk_image = document.getElementById("disk_image").files[0];
   var mem_size = document.getElementById("memory_size").value;
   var vram_size = document.getElementById("vram_size").value;
-  var disk_typ = document.getElementById("disk_typ").selectedIndex;
+  var disk_typ = document.getElementById("disk_typ").value;
 
   if (!isNaN(mem_size) && !isNaN(vram_size) && disk_image !== undefined)
   {
@@ -24,23 +24,25 @@ function load_image()
       vram: parseInt(mem_size)*1024*1024,
       acpi: document.getElementById("acpi_active").checked,
       vnet: document.getElementById("network_active").checked,
+      bios: document.getElementById("bios_mode").value == "seabios" ? "seabios.bin" : "bochs-bios.bin",
+      vgabios: document.getElementById("bios_mode").value == "seabios" ? "vgabios.bin" : "bochs-vgabios.bin",
       onstop: () => {document.getElementById("Init").style.display = "block";}
     };
-
-    if (disk_typ == 1)
+    if (disk_typ == "hda")
     {
       config["hda"] = disk_image;
     }
-    else if (disk_typ == 2)
+    else if (disk_typ == "sr0")
     {
       config["cdrom"] = disk_image;
     }
-    else if (disk_typ == 0)
+    else if (disk_typ == "fda")
     {
       config["fda"] = disk_image;
     }
 
-    window.emu = new Emulator(config);
+    var emu = new Emulator(config);
+    window.emu = emu;
   }
 }
 
@@ -87,6 +89,7 @@ function autodetect_image(elem)
   {
     document.getElementById("disk_typ").selectedIndex = 2;
   }
+  save_config();
 }
 
 function onload()
@@ -105,7 +108,7 @@ function onload()
   }
   if (localStorage.disk_typ)
   {
-     document.getElementById("disk_typ").selectedIndex = localStorage.disk_typ;
+     document.getElementById("disk_typ").value = localStorage.disk_typ;
   }
   if (localStorage.network_active)
   {

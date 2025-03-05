@@ -12,8 +12,8 @@ class vKeyboard
 
   pressKey(keyCode)
   {
-    //8: backspace, 13: return, 37: left 38: up, 39: right, 40: down
-    if ((keyCode <= 47 || (keyCode >= 112 && keyCode <= 145)) && keyCode != 32 || keyCode == 93)
+    //8: backspace, 13: return, 37: left 38: up, 39: right, 40: down, 91: Super-Key, 93: ContextMenu-Key
+    if ((keyCode <= 47 || (keyCode >= 112 && keyCode <= 145)) && keyCode != 32 || ([91, 93].indexOf(keyCode) >= 0))
     {
       this.engine.keyboard_adapter.simulate_press(keyCode);
     }
@@ -110,6 +110,7 @@ class vKeyboard
     content.appendChild(this.new_button("F11", () => pressKey(122)));
     content.appendChild(this.new_button("F12", () => pressKey(123)));
     content.appendChild(this.new_button("ESC", () => pressKey(27)));
+    content.appendChild(this.new_button("Super", () => pressKey(91)));
   }
 
   new_input(text, id, type="password"){
